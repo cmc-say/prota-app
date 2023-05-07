@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "690314374484",
+    "project_id": "prota-989a4",
+    "storage_bucket": "prota-989a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690314374484:android:8046d274ec3ba1ae1bacc1",
+        "android_client_info": {
+          "package_name": "com.prota"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690314374484-96kegfd8ppc3umg5dmon8nkh3ctp42gk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.prota",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "690314374484-etq4pqu5bt5enh1nnf1tnld7djrgvtlb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.prota",
+            "certificate_hash": "2ecf14b05f67e0a493c2a9bea4148aa6c043a604"
+          }
+        },
+        {
+          "client_id": "690314374484-71nolahj4brgdci4upmoovinbuqv04sn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkoJ2uICdGuZdDo51tQ0O3WAeXVeyuBT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690314374484-5q7c7kbrr5n9434qu0n5n7gidahgfo8t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "690314374484-vnln9q687pnn4r5kuuiidmr542i813mu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.Prota"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

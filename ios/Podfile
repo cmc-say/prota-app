@@ -24,7 +24,8 @@ end
 target 'Prota' do
   config = use_native_modules!
   pod 'GoogleUtilities', :modular_headers => true
-  pod 'FirebaseAuth'
+  pod 'FirebaseAuth', '10.7.0'
+  pod 'Firebase/Analytics'
   pod 'FirebaseCore', :modular_headers => true
 
   # Flags change depending on the env values.

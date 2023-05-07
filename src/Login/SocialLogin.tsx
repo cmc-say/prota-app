@@ -1,5 +1,11 @@
 import {Image} from 'react-native/types';
 import styled from 'styled-components/native';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+import {useEffect, useState} from 'react';
 
 const Test = styled.Text`
   margin-top: 200px;
@@ -56,6 +62,41 @@ const Btns = styled.View`
 `;
 
 function SocialLogin({navigation}: any) {
+  const googleSigninConfigure = () => {
+    GoogleSignin.configure({
+      webClientId:
+        '690314374484-71nolahj4brgdci4upmoovinbuqv04sn.apps.googleusercontent.com',
+      iosClientId:
+        '690314374484-71nolahj4brgdci4upmoovinbuqv04sn.apps.googleusercontent.com',
+    });
+  };
+  useEffect(() => {
+    googleSigninConfigure();
+  }, []);
+  const [login, setLogin] = useState<string>();
+  //   useEffect(() => {
+  //     GoogleSignin.configure({
+  //       webClientId:
+  //         '690314374484-71nolahj4brgdci4upmoovinbuqv04sn.apps.googleusercontent.com',
+  //     });
+  //   }, []);
+
+  const onPressGoogleBtn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+      const {idToken} = await GoogleSignin.signIn();
+      console.log('idToken : ', idToken);
+      if (idToken) {
+        setLogin(idToken);
+      }
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      await auth().signInWithCredential(googleCredential);
+      navigation.push('LogState');
+    } catch (error) {
+      console.log('Error during Google login:', error);
+    }
+  };
+
   return (
     <Top>
       <Total
@@ -69,7 +110,11 @@ function SocialLogin({navigation}: any) {
             <Img source={require('../assets/kakao.png')} />
             <Name>Kakao로 입장하기</Name>
           </Btn1>
-          <Btn2>
+          <Btn2
+            onPress={() => {
+              onPressGoogleBtn();
+              console.log('clicked');
+            }}>
             <Img source={require('../assets/Google.png')} />
             <Name>Google로 입장하기</Name>
           </Btn2>

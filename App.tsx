@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -6,6 +6,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {StatusBar} from 'react-native';
 import Login from './src/Login/Login';
 import SocialLogin from './src/Login/SocialLogin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import LogState from './src/Login/LogState';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +24,7 @@ function App(): JSX.Element {
           }}>
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="SocialLogin" component={SocialLogin} />
+          <Stack.Screen name="LogState" component={LogState} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>
