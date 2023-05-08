@@ -71,9 +71,7 @@ function SocialLogin({navigation}: any) {
   const googleSigninConfigure = () => {
     GoogleSignin.configure({
       webClientId:
-        '690314374484-71nolahj4brgdci4upmoovinbuqv04sn.apps.googleusercontent.com',
-      iosClientId:
-        '690314374484-71nolahj4brgdci4upmoovinbuqv04sn.apps.googleusercontent.com',
+        '690314374484-5q7c7kbrr5n9434qu0n5n7gidahgfo8t.apps.googleusercontent.com',
     });
   };
   useEffect(() => {
