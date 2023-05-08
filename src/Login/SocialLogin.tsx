@@ -6,6 +6,11 @@ import {
 } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {useEffect, useState} from 'react';
+import {
+  KakaoOAuthToken,
+  getProfile as getKakaoProfile,
+  login,
+} from '@react-native-seoul/kakao-login';
 
 const Test = styled.Text`
   margin-top: 200px;
@@ -62,6 +67,7 @@ const Btns = styled.View`
 `;
 
 function SocialLogin({navigation}: any) {
+  const [logins, setLogin] = useState<boolean>();
   const googleSigninConfigure = () => {
     GoogleSignin.configure({
       webClientId:
@@ -71,15 +77,21 @@ function SocialLogin({navigation}: any) {
     });
   };
   useEffect(() => {
+    const checkLoggedIn = () => {
+      auth().onAuthStateChanged(user => {
+        if (user) {
+          setLogin(true);
+          console.log('loggedIn');
+        } else {
+          setLogin(false);
+          console.log('loggedOut');
+        }
+      });
+    };
+    checkLoggedIn();
     googleSigninConfigure();
   }, []);
-  const [login, setLogin] = useState<string>();
-  //   useEffect(() => {
-  //     GoogleSignin.configure({
-  //       webClientId:
-  //         '690314374484-71nolahj4brgdci4upmoovinbuqv04sn.apps.googleusercontent.com',
-  //     });
-  //   }, []);
+  const [loginResult, setLoginResult] = useState<string>('');
 
   const onPressGoogleBtn = async () => {
     try {
@@ -87,13 +99,24 @@ function SocialLogin({navigation}: any) {
       const {idToken} = await GoogleSignin.signIn();
       console.log('idToken : ', idToken);
       if (idToken) {
-        setLogin(idToken);
+        setLoginResult(idToken);
       }
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       await auth().signInWithCredential(googleCredential);
       navigation.push('LogState');
     } catch (error) {
       console.log('Error during Google login:', error);
+    }
+  };
+
+  const signInWithKakao = async (): Promise<void> => {
+    try {
+      const token: KakaoOAuthToken = await login();
+      console.log('kakao token : ', token);
+      setLoginResult(JSON.stringify(token));
+      navigation.push('LogState');
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -104,9 +127,12 @@ function SocialLogin({navigation}: any) {
         onPress={() => {
           navigation.replace('SocialLogin');
         }}>
-        <Test>소셜 로그인 부분</Test>
+        <Test>소셜 로그인</Test>
         <Btns>
-          <Btn1>
+          <Btn1
+            onPress={() => {
+              signInWithKakao();
+            }}>
             <Img source={require('../assets/kakao.png')} />
             <Name>Kakao로 입장하기</Name>
           </Btn1>

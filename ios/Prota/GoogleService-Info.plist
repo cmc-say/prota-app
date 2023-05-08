@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>690314374484-vnln9q687pnn4r5kuuiidmr542i813mu.apps.googleusercontent.com</string>
+	<string>690314374484-uvonq039vc9abn7854hu2ga6pco6gv9p.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.690314374484-vnln9q687pnn4r5kuuiidmr542i813mu</string>
+	<string>com.googleusercontent.apps.690314374484-uvonq039vc9abn7854hu2ga6pco6gv9p</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>690314374484-96kegfd8ppc3umg5dmon8nkh3ctp42gk.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAUhniCX4NVpsPg_m8-BuRT2m2XCj4_nAA</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.Prota</string>
+	<string>com.prota</string>
 	<key>PROJECT_ID</key>
 	<string>prota-989a4</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:690314374484:ios:379f6364aa1fe84a1bacc1</string>
+	<string>1:690314374484:ios:db84905f746e36eb1bacc1</string>
 </dict>
 </plist>

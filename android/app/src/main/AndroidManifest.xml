@@ -8,7 +8,7 @@ package="com.prota">
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
-      android:allowBackup="false"
+      android:allowBackup="true"
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
@@ -22,5 +22,19 @@ package="com.prota">
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+      <activity 
+        android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+        android:exported="true">
+        <intent-filter>
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+
+          <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+          <data android:host="oauth"
+            android:scheme="kakaoaaad6e25d24f90fdc1be49f4b385fd62" />
+        </intent-filter>
+    </activity>
+
     </application>
 </manifest>

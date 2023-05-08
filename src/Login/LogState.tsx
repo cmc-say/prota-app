@@ -1,6 +1,14 @@
 import auth from '@react-native-firebase/auth';
 import {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
+import {
+  KakaoOAuthToken,
+  getProfile as getKakaoProfile,
+  logout,
+  login,
+  KakaoProfile,
+  getProfile,
+} from '@react-native-seoul/kakao-login';
 
 const Total = styled.TouchableOpacity`
   background-color: #15161c;
@@ -24,6 +32,7 @@ const Btn = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-bottom: 30px;
 `;
 
 const Name = styled.Text`
@@ -35,6 +44,9 @@ const Name = styled.Text`
 
 function LogState({navigation}: any) {
   const [login, setLogin] = useState<boolean>();
+  const [result, setResult] = useState<string>();
+  const [profile, setProfile] = useState<string>();
+
   useEffect(() => {
     const checkLoggedIn = () => {
       auth().onAuthStateChanged(user => {
@@ -49,16 +61,43 @@ function LogState({navigation}: any) {
     };
     checkLoggedIn();
   }, []);
+
+  const signOutWithKakao = async (): Promise<void> => {
+    const message = await logout();
+
+    setResult(message);
+  };
+
+  const getKakaoProfile = async (): Promise<void> => {
+    const profile: KakaoProfile = await getProfile();
+    setProfile(JSON.stringify(profile));
+  };
+  console.log(profile);
   return (
     <Top>
       <Total>
         <Word>로그인 된 상태!</Word>
+        <Word>{profile}</Word>
         <Btn
           onPress={() => {
             auth().signOut();
             navigation.replace('SocialLogin');
           }}>
           <Name>로그아웃 하기</Name>
+        </Btn>
+        <Btn
+          onPress={() => {
+            signOutWithKakao();
+            navigation.replace('SocialLogin');
+          }}>
+          <Name>카카오 로그아웃 하기</Name>
+        </Btn>
+        <Btn
+          onPress={() => {
+            getKakaoProfile();
+            console.log('clicked');
+          }}>
+          <Name>카카오톡 프로필 정보 가져와줘</Name>
         </Btn>
       </Total>
     </Top>
