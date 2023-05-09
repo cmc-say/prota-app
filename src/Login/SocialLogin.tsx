@@ -9,8 +9,13 @@ import {useEffect, useState} from 'react';
 import {
   KakaoOAuthToken,
   getProfile as getKakaoProfile,
+  getProfile,
   login,
 } from '@react-native-seoul/kakao-login';
+import Lottie from 'lottie-react-native';
+import {useAnimateHandler} from './Login.animation';
+import {useRecoilState} from 'recoil';
+import {AtomLoginRequired} from '../stores/tokenStore';
 
 const Test = styled.Text`
   margin-top: 200px;
@@ -61,6 +66,10 @@ const Name = styled.Text`
   margin-left: 5px;
 `;
 const Btns = styled.View`
+  position: absolute;
+  bottom: 90px;
+  width: 100%;
+  z-index: 3000;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,6 +99,14 @@ function SocialLogin({navigation}: any) {
     googleSigninConfigure();
   }, []);
   const [loginResult, setLoginResult] = useState<string>('');
+  const [isTouched, setIsTouched] = useState(false);
+  const [_, setLoginToken] = useRecoilState(AtomLoginRequired);
+  const {animationProgress, handleOnPress: handleAnimationClicked} =
+    useAnimateHandler();
+  const handleOnPress = () => {
+    setIsTouched(true);
+    handleAnimationClicked();
+  };
 
   const onPressGoogleBtn = async () => {
     try {
@@ -110,6 +127,7 @@ function SocialLogin({navigation}: any) {
   const signInWithKakao = async (): Promise<void> => {
     try {
       const token: KakaoOAuthToken = await login();
+      const profile = await getProfile();
       console.log('kakao token : ', token);
       setLoginResult(JSON.stringify(token));
       navigation.push('LogState');
@@ -119,13 +137,19 @@ function SocialLogin({navigation}: any) {
   };
 
   return (
-    <Top>
-      <Total
-        activeOpacity={1.0}
-        onPress={() => {
-          navigation.replace('SocialLogin');
-        }}>
-        <Test>소셜 로그인</Test>
+    <Total
+      activeOpacity={1}
+      onPress={() => {
+        handleOnPress();
+      }}>
+      <Lottie
+        style={{height: '100%', width: '100%'}}
+        //   progress={animationProgress}
+        source={require('../assets/lottie/splash.json')}
+        loop={false}
+        autoPlay
+      />
+      {isTouched && (
         <Btns>
           <Btn1
             onPress={() => {
@@ -143,8 +167,8 @@ function SocialLogin({navigation}: any) {
             <Name>Google로 입장하기</Name>
           </Btn2>
         </Btns>
-      </Total>
-    </Top>
+      )}
+    </Total>
   );
 }
 

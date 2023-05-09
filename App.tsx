@@ -4,15 +4,21 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StatusBar} from 'react-native';
-import Login from './src/Login/Login';
+// import Login from './src/Login/Login';
 import SocialLogin from './src/Login/SocialLogin';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import LogState from './src/Login/LogState';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createStackNavigator();
 
 function App(): JSX.Element {
   StatusBar.setBarStyle('light-content');
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     SplashScreen.hide();
+  //   }, 1000);
+  // }, []);
   return (
     <RecoilRoot>
       <NavigationContainer>
@@ -22,7 +28,7 @@ function App(): JSX.Element {
             gestureEnabled: true,
             animationEnabled: false,
           }}>
-          <Stack.Screen name="Login" component={Login} />
+          {/* <Stack.Screen name="Login" component={Login} /> */}
           <Stack.Screen name="SocialLogin" component={SocialLogin} />
           <Stack.Screen name="LogState" component={LogState} />
         </Stack.Navigator>
