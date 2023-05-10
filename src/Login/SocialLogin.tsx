@@ -1,33 +1,14 @@
-import {Image} from 'react-native/types';
+import {Image, Platform} from 'react-native';
 import styled from 'styled-components/native';
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
 import {useEffect, useState} from 'react';
-import {
-  KakaoOAuthToken,
-  getProfile as getKakaoProfile,
-  getProfile,
-  login,
-} from '@react-native-seoul/kakao-login';
 import Lottie from 'lottie-react-native';
 import {useAnimateHandler} from './Login.animation';
 import {useRecoilState} from 'recoil';
 import {AtomLoginRequired} from '../stores/tokenStore';
-
-const Test = styled.Text`
-  margin-top: 200px;
-  color: white;
-`;
+import {kakaoLogin} from './kakaoLogin';
+import GoogleLogin from './googleLogin';
 
 const Total = styled.TouchableOpacity`
-  background-color: #15161c;
-  flex: 1;
-`;
-
-const Top = styled.SafeAreaView`
   background-color: #15161c;
   flex: 1;
 `;
@@ -53,6 +34,7 @@ const Btn2 = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-bottom: 8px;
 `;
 const Img = styled.Image`
   width: 16px;
@@ -76,64 +58,14 @@ const Btns = styled.View`
 `;
 
 function SocialLogin({navigation}: any) {
-  const [logins, setLogin] = useState<boolean>();
-  const googleSigninConfigure = () => {
-    GoogleSignin.configure({
-      webClientId:
-        '690314374484-5q7c7kbrr5n9434qu0n5n7gidahgfo8t.apps.googleusercontent.com',
-    });
-  };
-  useEffect(() => {
-    const checkLoggedIn = () => {
-      auth().onAuthStateChanged(user => {
-        if (user) {
-          setLogin(true);
-          console.log('loggedIn');
-        } else {
-          setLogin(false);
-          console.log('loggedOut');
-        }
-      });
-    };
-    checkLoggedIn();
-    googleSigninConfigure();
-  }, []);
-  const [loginResult, setLoginResult] = useState<string>('');
   const [isTouched, setIsTouched] = useState(false);
   const [_, setLoginToken] = useRecoilState(AtomLoginRequired);
+
   const {animationProgress, handleOnPress: handleAnimationClicked} =
     useAnimateHandler();
   const handleOnPress = () => {
     setIsTouched(true);
     handleAnimationClicked();
-  };
-
-  const onPressGoogleBtn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-      const {idToken} = await GoogleSignin.signIn();
-      console.log('idToken : ', idToken);
-      if (idToken) {
-        setLoginResult(idToken);
-      }
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      await auth().signInWithCredential(googleCredential);
-      navigation.push('LogState');
-    } catch (error) {
-      console.log('Error during Google login:', error);
-    }
-  };
-
-  const signInWithKakao = async (): Promise<void> => {
-    try {
-      const token: KakaoOAuthToken = await login();
-      const profile = await getProfile();
-      console.log('kakao token : ', token);
-      setLoginResult(JSON.stringify(token));
-      navigation.push('LogState');
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   return (
@@ -143,8 +75,8 @@ function SocialLogin({navigation}: any) {
         handleOnPress();
       }}>
       <Lottie
-        style={{height: '100%', width: '100%'}}
-        //   progress={animationProgress}
+        style={{width: '100%'}}
+        progress={animationProgress}
         source={require('../assets/lottie/splash.json')}
         loop={false}
         autoPlay
@@ -153,19 +85,21 @@ function SocialLogin({navigation}: any) {
         <Btns>
           <Btn1
             onPress={() => {
-              signInWithKakao();
+              kakaoLogin({navigation});
             }}>
             <Img source={require('../assets/kakao.png')} />
             <Name>Kakao로 입장하기</Name>
           </Btn1>
-          <Btn2
-            onPress={() => {
-              onPressGoogleBtn();
-              console.log('clicked');
-            }}>
-            <Img source={require('../assets/Google.png')} />
-            <Name>Google로 입장하기</Name>
-          </Btn2>
+          <GoogleLogin navigation={navigation} />
+          {Platform.OS === 'ios' && (
+            <Btn2
+              onPress={() => {
+                console.log('clicked');
+              }}>
+              <Img source={require('../assets/Apple.png')} />
+              <Name>Apple로 입장하기</Name>
+            </Btn2>
+          )}
         </Btns>
       )}
     </Total>

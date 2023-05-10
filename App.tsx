@@ -1,24 +1,32 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {StatusBar} from 'react-native';
-// import Login from './src/Login/Login';
 import SocialLogin from './src/Login/SocialLogin';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import LogState from './src/Login/LogState';
-import SplashScreen from 'react-native-splash-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 const Stack = createStackNavigator();
 
 function App(): JSX.Element {
   StatusBar.setBarStyle('light-content');
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     SplashScreen.hide();
-  //   }, 1000);
-  // }, []);
+  const getFcmToken = useCallback(async () => {
+    const tokenExist = await AsyncStorage.getItem('fcmToken');
+    // console.log(tokenExist);
+    if (!tokenExist) {
+      const fcmToken = await messaging().getToken();
+      AsyncStorage.setItem('fcmToken', fcmToken);
+    }
+  }, []);
+  getFcmToken();
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    return unsubscribe;
+  }, []);
   return (
     <RecoilRoot>
       <NavigationContainer>
