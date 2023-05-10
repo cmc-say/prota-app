@@ -36,9 +36,9 @@ const GoogleLogin = ({navigation}: any) => {
         '690314374484-5q7c7kbrr5n9434qu0n5n7gidahgfo8t.apps.googleusercontent.com',
     });
   };
-  const deviceToken = AsyncStorage.getItem('fcmToken');
 
   const googleSignIn = async (): Promise<boolean> => {
+    const deviceToken = await AsyncStorage.getItem('fcmToken');
     try {
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
       const {idToken, user} = await GoogleSignin.signIn();
@@ -47,7 +47,7 @@ const GoogleLogin = ({navigation}: any) => {
       console.log('google user id : ', user.id);
       axios({
         method: 'post',
-        url: 'http://ec2-3-36-175-96.ap-northeast-2.compute.amazonaws.com:808/api/v1/auth/login',
+        url: 'http://ec2-3-36-175-96.ap-northeast-2.compute.amazonaws.com:8080/api/v1/auth/login',
         data: {
           deviceToken: deviceToken,
           socialId: user.id,
@@ -55,8 +55,8 @@ const GoogleLogin = ({navigation}: any) => {
         },
       })
         .then(function (response) {
-          console.log(response);
-          AsyncStorage.setItem('accessToken', response.data.accessToken);
+          console.log(response.data.data.accessToken);
+          AsyncStorage.setItem('accessToken', response.data.data.accessToken);
         })
         .catch(function (error) {
           console.log(error);

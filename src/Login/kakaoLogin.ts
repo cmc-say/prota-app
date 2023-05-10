@@ -8,7 +8,8 @@ import {
 import axios from 'axios';
 
 export const kakaoLogin = async ({navigation}: any): Promise<void> => {
-  const deviceToken = AsyncStorage.getItem('fcmToken');
+  const deviceToken = await AsyncStorage.getItem('fcmToken');
+  console.log('deviceToken ', deviceToken);
   try {
     const token: KakaoOAuthToken = await login();
     const profile = await getProfile();
@@ -16,7 +17,7 @@ export const kakaoLogin = async ({navigation}: any): Promise<void> => {
     console.log('kakao id : ', profile.id);
     axios({
       method: 'post',
-      url: 'http://ec2-3-36-175-96.ap-northeast-2.compute.amazonaws.com:808/api/v1/auth/login',
+      url: 'http://ec2-3-36-175-96.ap-northeast-2.compute.amazonaws.com:8080/api/v1/auth/login',
       data: {
         deviceToken: deviceToken,
         socialId: profile.id,
@@ -24,8 +25,8 @@ export const kakaoLogin = async ({navigation}: any): Promise<void> => {
       },
     })
       .then(function (response) {
-        console.log(response);
-        AsyncStorage.setItem('accessToken', response.data.accessToken);
+        console.log(response.data.data.accessToken);
+        AsyncStorage.setItem('accessToken', response.data.data.accessToken);
       })
       .catch(function (error) {
         console.log(error);

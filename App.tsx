@@ -14,7 +14,7 @@ function App(): JSX.Element {
   StatusBar.setBarStyle('light-content');
   const getFcmToken = useCallback(async () => {
     const tokenExist = await AsyncStorage.getItem('fcmToken');
-    // console.log(tokenExist);
+    console.log(tokenExist);
     if (!tokenExist) {
       const fcmToken = await messaging().getToken();
       AsyncStorage.setItem('fcmToken', fcmToken);
