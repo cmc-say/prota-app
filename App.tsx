@@ -7,6 +7,7 @@ import SocialLogin from './src/Login/SocialLogin';
 import LogState from './src/Login/LogState';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
+import WebViewPage from './src/webview/WebViewPage';
 
 const Stack = createStackNavigator();
 
@@ -36,9 +37,9 @@ function App(): JSX.Element {
             gestureEnabled: true,
             animationEnabled: false,
           }}>
-          {/* <Stack.Screen name="Login" component={Login} /> */}
           <Stack.Screen name="SocialLogin" component={SocialLogin} />
           <Stack.Screen name="LogState" component={LogState} />
+          <Stack.Screen name="WebViewPage" component={WebViewPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>

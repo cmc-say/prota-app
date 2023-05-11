@@ -1,12 +1,13 @@
 import {Image, Platform} from 'react-native';
 import styled from 'styled-components/native';
-import {useEffect, useState} from 'react';
+import {lazy, useEffect, useState} from 'react';
 import Lottie from 'lottie-react-native';
 import {useAnimateHandler} from './Login.animation';
 import {useRecoilState} from 'recoil';
 import {AtomLoginRequired} from '../stores/tokenStore';
 import {kakaoLogin} from './kakaoLogin';
 import GoogleLogin from './googleLogin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Total = styled.TouchableOpacity`
   background-color: #15161c;
@@ -59,13 +60,17 @@ const Btns = styled.View`
 
 function SocialLogin({navigation}: any) {
   const [isTouched, setIsTouched] = useState(false);
-  const [_, setLoginToken] = useRecoilState(AtomLoginRequired);
 
   const {animationProgress, handleOnPress: handleAnimationClicked} =
     useAnimateHandler();
-  const handleOnPress = () => {
-    setIsTouched(true);
-    handleAnimationClicked();
+  const handleOnPress = async () => {
+    const deviceToken = await AsyncStorage.getItem('fcmToken');
+    if (deviceToken) {
+      navigation.replace('WebViewPage', {lazy: true});
+    } else {
+      setIsTouched(true);
+      handleAnimationClicked();
+    }
   };
 
   return (

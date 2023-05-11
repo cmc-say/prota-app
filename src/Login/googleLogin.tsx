@@ -47,7 +47,7 @@ const GoogleLogin = ({navigation}: any) => {
       console.log('google user id : ', user.id);
       axios({
         method: 'post',
-        url: 'https://s0pterest.shop.ec2-3-36-175-96.ap-northeast-2.compute.amazonaws.com/api/v1/auth/login',
+        url: 'https://s0pterest.shop/api/v1/auth/login',
         data: {
           deviceToken: deviceToken,
           socialId: user.id,
@@ -57,6 +57,7 @@ const GoogleLogin = ({navigation}: any) => {
         .then(function (response) {
           console.log(response.data.data.accessToken);
           AsyncStorage.setItem('accessToken', response.data.data.accessToken);
+          navigation.replace('WebViewPage', {lazy: true});
         })
         .catch(function (error) {
           console.log(error);
