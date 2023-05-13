@@ -4,6 +4,7 @@ import {useEffect} from 'react';
 import styled from 'styled-components/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Config from 'react-native-config';
 
 const Btn2 = styled.TouchableOpacity`
   width: 340px;
@@ -32,8 +33,7 @@ const Name = styled.Text`
 const GoogleLogin = ({navigation}: any) => {
   const googleSigninConfigure = () => {
     GoogleSignin.configure({
-      webClientId:
-        '690314374484-5q7c7kbrr5n9434qu0n5n7gidahgfo8t.apps.googleusercontent.com',
+      webClientId: Config.GOOGLE_CLIENT_ID,
     });
   };
 
@@ -47,7 +47,7 @@ const GoogleLogin = ({navigation}: any) => {
       console.log('google user id : ', user.id);
       axios({
         method: 'post',
-        url: 'https://s0pterest.shop/api/v1/auth/login',
+        url: `${Config.API_URL}/api/v1/auth/login`,
         data: {
           deviceToken: deviceToken,
           socialId: user.id,

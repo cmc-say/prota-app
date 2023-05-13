@@ -26,6 +26,17 @@ function App(): JSX.Element {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
+    const removeValue = async () => {
+      try {
+        await AsyncStorage.removeItem('accessToken');
+        console.log('removed');
+      } catch (e) {
+        // remove error
+      }
+
+      console.log('Done.');
+    };
+    removeValue();
     return unsubscribe;
   }, []);
   return (

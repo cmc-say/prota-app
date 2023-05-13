@@ -5,6 +5,7 @@ import NavBar from './NavBar';
 
 const Top = styled.SafeAreaView`
   background-color: #15161c;
+  flex: 1;
 `;
 
 const Box = styled.View`

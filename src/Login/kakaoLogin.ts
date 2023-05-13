@@ -6,6 +6,7 @@ import {
   login,
 } from '@react-native-seoul/kakao-login';
 import axios from 'axios';
+import Config from 'react-native-config';
 
 export const kakaoLogin = async ({navigation}: any): Promise<void> => {
   const deviceToken = await AsyncStorage.getItem('fcmToken');
@@ -13,11 +14,10 @@ export const kakaoLogin = async ({navigation}: any): Promise<void> => {
   try {
     const token: KakaoOAuthToken = await login();
     const profile = await getProfile();
-    console.log('kakao token : ', token);
     console.log('kakao id : ', profile.id);
     axios({
       method: 'post',
-      url: 'https://s0pterest.shop/api/v1/auth/login',
+      url: `${Config.API_URL}/api/v1/auth/login`,
       data: {
         deviceToken: deviceToken,
         socialId: profile.id,

@@ -8,6 +8,7 @@ import {AtomLoginRequired} from '../stores/tokenStore';
 import {kakaoLogin} from './kakaoLogin';
 import GoogleLogin from './googleLogin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Config from 'react-native-config';
 
 const Total = styled.TouchableOpacity`
   background-color: #15161c;
@@ -64,7 +65,7 @@ function SocialLogin({navigation}: any) {
   const {animationProgress, handleOnPress: handleAnimationClicked} =
     useAnimateHandler();
   const handleOnPress = async () => {
-    const deviceToken = await AsyncStorage.getItem('fcmToken');
+    const deviceToken = await AsyncStorage.getItem('accessToken');
     if (deviceToken) {
       navigation.replace('WebViewPage', {lazy: true});
     } else {
@@ -72,6 +73,9 @@ function SocialLogin({navigation}: any) {
       handleAnimationClicked();
     }
   };
+
+  // const urlTest = Config.API_URL;
+  // console.log('urlTest is : ', urlTest);
 
   return (
     <Total
