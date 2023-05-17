@@ -5,6 +5,8 @@ import styled from 'styled-components/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Config from 'react-native-config';
+import {useRecoilState} from 'recoil';
+import {AtomLoginRequired} from '../stores/tokenStore';
 
 const Btn2 = styled.TouchableOpacity`
   width: 340px;
@@ -38,30 +40,36 @@ const GoogleLogin = ({navigation}: any) => {
   };
 
   const googleSignIn = async (): Promise<boolean> => {
-    const deviceToken = await AsyncStorage.getItem('fcmToken');
+    const [_, setLoginToken] = useRecoilState(AtomLoginRequired);
+    const deviceToken = (await AsyncStorage.getItem('fcmToken')) ?? '';
     try {
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
       const {idToken, user} = await GoogleSignin.signIn();
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       await auth().signInWithCredential(googleCredential);
       console.log('google user id : ', user.id);
-      axios({
-        method: 'post',
-        url: `${Config.API_URL}/api/v1/auth/login`,
-        data: {
-          deviceToken: deviceToken,
-          socialId: user.id,
-          socialType: 'google',
-        },
-      })
-        .then(function (response) {
-          console.log(response.data.data.accessToken);
-          AsyncStorage.setItem('accessToken', response.data.data.accessToken);
-          navigation.replace('WebViewPage', {lazy: true});
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      setLoginToken({
+        deviceToken: deviceToken,
+        socialId: user.id,
+        socialType: 'google',
+      });
+      // axios({
+      //   method: 'post',
+      //   url: `${Config.API_URL}/api/v1/auth/login`,
+      //   data: {
+      //     deviceToken: deviceToken,
+      //     socialId: user.id,
+      //     socialType: 'google',
+      //   },
+      // })
+      //   .then(function (response) {
+      //     console.log(response.data.data.accessToken);
+      //     AsyncStorage.setItem('accessToken', response.data.data.accessToken);
+      //     navigation.replace('WebViewPage', {lazy: true});
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
       return true;
     } catch (error) {
       console.log('Error during Google login:', error);
