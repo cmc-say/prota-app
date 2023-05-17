@@ -5,10 +5,10 @@ import Lottie from 'lottie-react-native';
 import {useAnimateHandler} from './Login.animation';
 import {useRecoilState} from 'recoil';
 import {AtomLoginRequired} from '../stores/tokenStore';
-import {kakaoLogin} from './kakaoLogin';
 import GoogleLogin from './googleLogin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from 'react-native-config';
+import KakaoLogin from './kakaoLogin';
 
 const Total = styled.TouchableOpacity`
   background-color: #15161c;
@@ -61,13 +61,12 @@ const Btns = styled.View`
 
 function SocialLogin({navigation}: any) {
   const [isTouched, setIsTouched] = useState(false);
-
   const {animationProgress, handleOnPress: handleAnimationClicked} =
     useAnimateHandler();
   const handleOnPress = async () => {
     const deviceToken = await AsyncStorage.getItem('accessToken');
     if (deviceToken) {
-      navigation.replace('WebViewPage', {lazy: true});
+      navigation.push('WebViewPage', {lazy: true});
     } else {
       setIsTouched(true);
       handleAnimationClicked();
@@ -92,13 +91,7 @@ function SocialLogin({navigation}: any) {
       />
       {isTouched && (
         <Btns>
-          <Btn1
-            onPress={() => {
-              kakaoLogin({navigation});
-            }}>
-            <Img source={require('../assets/kakao.png')} />
-            <Name>Kakao로 입장하기</Name>
-          </Btn1>
+          <KakaoLogin navigation={navigation} />
           <GoogleLogin navigation={navigation} />
           {Platform.OS === 'ios' && (
             <Btn2

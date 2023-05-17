@@ -38,9 +38,9 @@ const GoogleLogin = ({navigation}: any) => {
       webClientId: Config.GOOGLE_CLIENT_ID,
     });
   };
+  const [_, setLoginToken] = useRecoilState(AtomLoginRequired);
 
   const googleSignIn = async (): Promise<boolean> => {
-    const [_, setLoginToken] = useRecoilState(AtomLoginRequired);
     const deviceToken = (await AsyncStorage.getItem('fcmToken')) ?? '';
     try {
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
@@ -53,23 +53,7 @@ const GoogleLogin = ({navigation}: any) => {
         socialId: user.id,
         socialType: 'google',
       });
-      // axios({
-      //   method: 'post',
-      //   url: `${Config.API_URL}/api/v1/auth/login`,
-      //   data: {
-      //     deviceToken: deviceToken,
-      //     socialId: user.id,
-      //     socialType: 'google',
-      //   },
-      // })
-      //   .then(function (response) {
-      //     console.log(response.data.data.accessToken);
-      //     AsyncStorage.setItem('accessToken', response.data.data.accessToken);
-      //     navigation.replace('WebViewPage', {lazy: true});
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
+      navigation.replace('WebViewPage', {lazy: true});
       return true;
     } catch (error) {
       console.log('Error during Google login:', error);

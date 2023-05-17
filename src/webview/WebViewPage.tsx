@@ -126,10 +126,13 @@ const WebViewPage: React.FC<WebviewContainerProps> = ({}) => {
             marginBottom:
               navStatus === NavStatus.NO_NAV ? inset.bottom : inset.bottom + 90,
           }}
-          source={{uri: 'http://localhost:3000'}}
+          source={{uri: 'http://172.20.10.4:3000/login'}}
           ref={setRef}
           onLoad={() => {
             webviewRef?.postMessage('');
+          }}
+          onError={e => {
+            console.log(e);
           }}
           onMessage={onMessageReceived}
           sharedCookiesEnabled={true}
